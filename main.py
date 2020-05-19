@@ -3,7 +3,7 @@ from yolo import yolo
 import cv2
 
 
-
+'''
 vid = cv2.VideoCapture(0) 
 
 capturing = True  
@@ -13,12 +13,14 @@ while(capturing):
     capturing = False
 
 vid.release() 
-cv2.destroyAllWindows() 
+cv2.destroyAllWindows() '''
+
+frame = cv2.imread("gallery/download.jpeg")
 
 
 
 power = led_power(frame)
-LABELS, classIDs = yolo(frame)
+image, LABELS, classIDs = yolo(frame)
 
 
 def common_member(a, b): 
@@ -36,9 +38,11 @@ for i in range(len(classIDs)):
 
 classes = ['person', 'bicycle', 'car', 'motorbike', 'bus', 'truck']
 
-print(objects)
+
 
 if(common_member(objects, classes)):
-    ON(power)
+    print("Turn on the lights with power :" , power)
 else:
-    OFF()
+    print("Turn off the lights")
+
+cv2.imwrite("output_obj.jpg", image)

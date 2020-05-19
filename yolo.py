@@ -5,7 +5,7 @@ import cv2
 import os
 
 
-def yolo(iage):
+def yolo(image):
 
     boxes=[]
     confidences=[]
@@ -30,7 +30,7 @@ def yolo(iage):
     print("[INFO] loading YOLO from disk")
     net=cv2.dnn.readNetFromDarknet("yolov3.cfg", "yolov3.weights")
 
-    image=cv2.imread("gallery/yolo1.jpg")
+    #image=cv2.imread("gallery/yolo1.jpg")
     (H,W)=image.shape[:2]
 
     ln=net.getLayerNames()
@@ -63,26 +63,32 @@ def yolo(iage):
 
     idxs=cv2.dnn.NMSBoxes(boxes, confidences,args["confidence"], args["threshold"])
 
-    return LABELS, classIDs
+    #return LABELS, classIDs
 
+
+
+    if(len(idxs)>0):
+        for i in idxs.flatten():
+            (x, y)=(boxes[i][0], boxes[i][1])
+            (w, h)=(boxes[i][2], boxes[i][3])
+
+            color=[int(c) for c in COLORS[classIDs[i]]]
+            cv2.rectangle(image, (x, y), (x+w,y+h), color, 2)
+            text="{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
+            #print(LABELS[classIDs[i]])
+            cv2.putText(image, text, (x, y-5), cv2.cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+    return image, LABELS, classIDs
 
 '''
-if(len(idxs)>0):
-    for i in idxs.flatten():
-        (x, y)=(boxes[i][0], boxes[i][1])
-        (w, h)=(boxes[i][2], boxes[i][3])
-
-        color=[int(c) for c in COLORS[classIDs[i]]]
-        cv2.rectangle(image, (x, y), (x+w,y+h), color, 2)
-        text="{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
-        print(LABELS[classIDs[i]])
-        cv2.putText(image, text, (x, y-5), cv2.cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-
 cv2.imshow("image", image)
-cv2.waitKey(0)
+cv2.waitKey(0)'''
 
-cv2.imwrite("object1.png",image)'''
+'''
+image = yolo(cv2.imread("gallery/yolo1.jpg"))
+
+
+cv2.imwrite("object1.jpg",image)'''
 
 
 

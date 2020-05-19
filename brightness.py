@@ -20,7 +20,8 @@ def led_power(img_rgb):
 
     avg_value = np.mean(img_hsv[:, :, 2])
 
-    print(avg_saturation, avg_value)
+    print("average saturation :",avg_saturation)
+    print("average value :", avg_value)
 
     #led_val = (((avg_value/(6*255)) + (avg_saturation/(2*255)))/(263.75/255))*255
 
@@ -28,13 +29,12 @@ def led_power(img_rgb):
 
     led_val = (255-(avg_value/1.2)-(avg_saturation/4))
 
+    print("led value: ", led_val)
+
     if(led_val <130):
         power = 0
     else:
-        print(led_val)
         power = ((led_val-100)/125) *255
-
-    print(power)
 
 
     #img_rgb = cv2.cvtColor(img_hsv, cv2.COLOR_HSV2BGR)
@@ -44,3 +44,10 @@ def led_power(img_rgb):
     #cv2.waitKey(0)
 
     return power
+
+'''
+
+im = cv2.imread("gallery/bright2.jpeg")
+print("led power :", led_power(im))
+'''
+
